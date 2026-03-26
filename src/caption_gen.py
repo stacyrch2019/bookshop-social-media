@@ -8,7 +8,6 @@ Each platform gets a different style:
 """
 
 GENRE_HASHTAGS = {
-   GENRE_HASHTAGS = {
     "mystery":    ["#MysteryBooks", "#CrimeFiction", "#WhodunitReads", "#MysteryBookClub"],
     "thriller":   ["#ThrillerReads", "#ThrillerBooks", "#PageTurner", "#CantPutItDown"],
     "sci-fi":     ["#SciFiBooks", "#ScienceFiction", "#SciFiReads", "#SpaceOpera"],
@@ -29,9 +28,60 @@ COMMON_HASHTAGS = [
     "#BookLovers", "#IndieBookshop", "#Bookshop",
 ]
 
+DISCLOSURE = "As an affiliate of Bookshop.org, I make a small percentage on each book sale."
+
 
 def _genre_tags(genre: str) -> list[str]:
     return GENRE_HASHTAGS.get(genre.lower().strip(), GENRE_HASHTAGS["default"])
 
 
-def generate_captions(book: dict, affiliate_id
+def generate_captions(book: dict, affiliate_id: str) -> dict[str, str]:
+    title = book.get("title", "")
+    author = book.get("author", "")
+    genre = book.get("genre", "default")
+    blurb = book.get("blurb", "").strip()
+
+    isbn = book.get("isbn", "").strip()
+    url = book.get("affiliate_url", "").strip()
+    if not url or "YOUR_ID" in url:
+        url = f"https://bookshop.org/a/{affiliate_id}/{isbn}" if isbn else "https://bookshop.org"
+
+    tags_list = _genre_tags(genre) + COMMON_HASHTAGS[:4]
+
+    # ── Bluesky ──────────────────────────────────────────────────────────────
+    bsky = f"📚 Reading rec: {title} by {author}\n\n"
+    if blurb:
+        bsky += f"{blurb}\n\n"
+    bsky += f"{DISCLOSURE}\n\n"
+    bsky += f"Shop it (supports indie booksellers): {url}\n\n"
+    bsky += " ".join(tags_list[:6])
+
+    # ── Instagram ────────────────────────────────────────────────────────────
+    ig_openers = [
+        "If your TBR isn't tall enough yet, let me help. 📚",
+        "This one deserves a spot on your shelf.",
+        "Current rec I keep pressing into people's hands:",
+        "Not me recommending books again… oh wait, yes me.",
+    ]
+    opener = ig_openers[len(title) % len(ig_openers)]
+
+    ig = f"{opener}\n\n"
+    ig += f"✦ {title}\n"
+    ig += f"✦ {author}\n\n"
+    if blurb:
+        ig += f"{blurb}\n\n"
+    ig += f"{DISCLOSURE}\n\n"
+    ig += "🔗 Shop link in bio — every purchase supports indie booksellers!\n\n"
+    ig += " ".join(_genre_tags(genre) + COMMON_HASHTAGS)
+
+    # ── TikTok ───────────────────────────────────────────────────────────────
+    tt = f"{title} by {author} — {blurb[:80] + '…' if len(blurb) > 80 else blurb}\n"
+    tt += f"{DISCLOSURE}\n"
+    tt += "Link in bio 🔗\n"
+    tt += " ".join(_genre_tags(genre)[:3] + ["#BookTok", "#BookRecommendation"])
+
+    return {
+        "bluesky": bsky,
+        "instagram": ig,
+        "tiktok": tt,
+    }
