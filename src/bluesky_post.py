@@ -36,9 +36,31 @@ def post_to_bluesky(book: dict, image_path: str, caption: str, config) -> bool:
         )
 
         client.send_image(
+# Upload image blob first
+        with open(image_path, "rb") as f:
+            image_data = f.read()
+
+        upload = client.upload_blob(image_data)
+
+        # Build post with embedded image
+        from atproto import models
+        client.send_post(
             text=caption,
-            image=image_data,
-            image_alt=alt_text,
+            embed=models.AppBskyEmbedImages.Main(
+                images=[
+                    models.AppBskyEmbedImages.Image(
+                        alt=alt_text,
+                        image=upload.blob,
+                    )
+                ]
+            )
+        )
+        print(f"  ✓ Bluesky: posted successfully")
+        return True
+
+    except Exception as e:
+        print(f"  ✗ Bluesky: {e}")
+        return False
         )
         print(f"  ✓ Bluesky: posted successfully")
         return True
