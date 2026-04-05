@@ -61,10 +61,3 @@ def post_to_bluesky(book: dict, image_path: str, caption: str, config) -> bool:
     except Exception as e:
         print(f"  ✗ Bluesky: {e}")
         return False
-        )
-        print(f"  ✓ Bluesky: posted successfully")
-        return True
-
-    except Exception as e:
-        print(f"  ✗ Bluesky: {e}")
-        return False
