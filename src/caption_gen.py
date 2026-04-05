@@ -49,12 +49,15 @@ def generate_captions(book: dict, affiliate_id: str) -> dict[str, str]:
     tags_list = _genre_tags(genre) + COMMON_HASHTAGS[:4]
 
     # ── Bluesky ──────────────────────────────────────────────────────────────
-    bsky = f"📚 Reading rec: {title} by {author}\n\n"
+    # ── Bluesky ──────────────────────────────────────────────────────────────
+    bsky = f"📚 {title} by {author}\n\n"
     if blurb:
-        bsky += f"{blurb}\n\n"
-    bsky += f"{DISCLOSURE}\n\n"
-    bsky += f"Shop it (supports indie booksellers): {url}\n\n"
-    bsky += " ".join(tags_list[:6])
+        # Trim blurb to keep total under 300 chars
+        max_blurb = 200 - len(title) - len(author)
+        trimmed = blurb[:max_blurb] + "…" if len(blurb) > max_blurb else blurb
+        bsky += f"{trimmed}\n\n"
+    bsky += f"Shop: {url}\n"
+    bsky += f"{DISCLOSURE}"
 
     # ── Instagram ────────────────────────────────────────────────────────────
     ig_openers = [
