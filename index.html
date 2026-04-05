@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Fort Bookshop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:ital@0;1&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #1a1208;
+      --cream: #f5f0e8;
+      --warm: #f0e6d0;
+      --rust: #8b3a1a;
+      --gold: #c9922a;
+      --muted: #6b5c42;
+      --border: #d4c5a9;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 3rem 2rem 2.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 40px,
+        rgba(201,146,42,0.04) 40px,
+        rgba(201,146,42,0.04) 41px
+      );
+    }
+
+    .header-inner { position: relative; z-index: 1; }
+
+    .shop-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+
+    .shop-name em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .tagline {
+      font-family: 'Libre Baskerville', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--border);
+      margin-top: 0.75rem;
+      letter-spacing: 0.02em;
+    }
+
+    .gold-rule {
+      width: 60px;
+      height: 2px;
+      background: var(--gold);
+      margin: 1.5rem auto 0;
+    }
+
+    /* ── Nav ── */
+    nav {
+      background: var(--warm);
+      border-bottom: 1px solid var(--border);
+      padding: 0.9rem 2rem;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--rust); }
+
+    /* ── Hero ── */
+    .hero {
+      max-width: 780px;
+      margin: 4rem auto 3rem;
+      padding: 0 2rem;
+      text-align: center;
+    }
+
+    .hero h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 400;
+      line-height: 1.35;
+      color: var(--ink);
+    }
+
+    .hero h2 em {
+      font-style: italic;
+      color: var(--rust);
+    }
+
+    .hero p {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--muted);
+      margin-top: 1.25rem;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 0.85rem 2.2rem;
+      background: var(--rust);
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .cta-btn:hover { background: var(--ink); }
+
+    /* ── Section ── */
+    .section {
+      max-width: 900px;
+      margin: 0 auto 4rem;
+      padding: 0 2rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .section-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      white-space: nowrap;
+    }
+
+    .section-rule {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── Genre grid ── */
+    .genre-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+
+    .genre-card {
+      background: var(--warm);
+      border: 1px solid var(--border);
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      text-decoration: none;
+      color: var(--ink);
+      transition: border-color 0.2s, transform 0.2s;
+      display: block;
+    }
+
+    .genre-card:hover {
+      border-color: var(--rust);
+      transform: translateY(-2px);
+    }
+
+    .genre-icon { font-size: 1.8rem; display: block; margin-bottom: 0.5rem; }
+
+    .genre-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      display: block;
+    }
+
+    .genre-desc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 0.3rem;
+      font-family: 'Libre Baskerville', serif;
+      font-style: italic;
+    }
+
+    /* ── About strip ── */
+    .about-strip {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 3rem 2rem;
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .about-strip p {
+      font-family: 'Libre Baskerville', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      max-width: 600px;
+      margin: 0 auto;
+      color: var(--border);
+    }
+
+    .about-strip p strong {
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    /* ── Social ── */
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.4rem;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-family: 'DM Sans', sans-serif;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .social-link:hover { border-color: var(--rust); color: var(--rust); }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--warm);
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-family: 'Libre Baskerville', serif;
+      font-style: italic;
+    }
+
+    footer a { color: var(--muted); }
+    footer a:hover { color: var(--rust); }
+
+    .disclosure {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="shop-name">The <em>Fort</em> Bookshop</div>
+      <div class="tagline">Independent reads for independent minds — Fort Wayne, Indiana</div>
+      <div class="gold-rule"></div>
+    </div>
+  </header>
+
+  <nav>
+    <a href="#shop">Shop</a>
+    <a href="#genres">Browse by Genre</a>
+    <a href="#about">About</a>
+    <a href="#social">Find Us</a>
+    <a href="privacy-policy.html">Privacy Policy</a>
+  </nav>
+
+  <section class="hero" id="shop">
+    <h2>Handpicked reads in <em>mystery, thriller,<br>sci-fi, horror,</em> and nonfiction.</h2>
+    <p>Every book in this shop is chosen with care. When you buy through our links, you support both independent booksellers nationwide and this little corner of Fort Wayne.</p>
+    <a class="cta-btn" href="https://bookshop.org/shop/thefortbookshop" target="_blank" rel="noopener">Browse the Shop →</a>
+  </section>
+
+  <div class="section" id="genres">
+    <div class="section-header">
+      <h3>Browse by Genre</h3>
+      <div class="section-rule"></div>
+    </div>
+    <div class="genre-grid">
+      <a class="genre-card" href="https://bookshop.org/shop/thefortbookshop" target="_blank" rel="noopener">
+        <span class="genre-icon">🔍</span>
+        <span class="genre-name">Mystery</span>
+        <span class="genre-desc">Whodunits & crime fiction</span>
+      </a>
+      <a class="genre-card" href="https://bookshop.org/shop/thefortbookshop" target="_blank" rel="noopener">
+        <span class="genre-icon">⚡</span>
+        <span class="genre-name">Thriller</span>
+        <span class="genre-desc">Can't-put-it-down reads</span>
+      </a>
+      <a class="genre-card" href="https://bookshop.org/shop/thefortbookshop" target="_blank" rel="noopener">
+        <span class="genre-icon">🚀</span>
+        <span class="genre-name">Sci-Fi</span>
+        <span class="genre-desc">Futures worth imagining</span>
+      </a>
+      <a class="genre-card" href="https://bookshop.org/shop/thefortbookshop" target="_blank" rel="noopener">
+        <span class="genre-icon">🕯️</span>
+        <span class="genre-name">Horror</span>
+        <span class="genre-desc">Dark & deeply unsettling</span>
+      </a>
+      <a class="genre-card" href="https://bookshop.org/shop/thefortbookshop" target="_blank" rel="noopener">
+        <span class="genre-icon">📰</span>
+        <span class="genre-name">Nonfiction</span>
+        <span class="genre-desc">True stories & big ideas</span>
+      </a>
+      <a class="genre-card" href="https://bookshop.org/shop/thefortbookshop" target="_blank" rel="noopener">
+        <span class="genre-icon">🗳️</span>
+        <span class="genre-name">Politics</span>
+        <span class="genre-desc">Democracy & civic life</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="about-strip" id="about">
+    <p>The Fort Bookshop is an affiliate shop rooted in <strong>Fort Wayne, Indiana</strong>. We believe in the power of a good book to challenge, comfort, and connect. Every purchase through our links supports <strong>independent booksellers</strong> across the country — not a warehouse.</p>
+  </div>
+
+  <div class="section" id="social">
+    <div class="section-header">
+      <h3>Find Us Online</h3>
+      <div class="section-rule"></div>
+    </div>
+    <div class="social-links">
+      <a class="social-link" href="https://bsky.app" target="_blank" rel="noopener">🦋 Bluesky</a>
+      <a class="social-link" href="https://instagram.com" target="_blank" rel="noopener">📷 Instagram</a>
+      <a class="social-link" href="https://tiktok.com" target="_blank" rel="noopener">🎵 TikTok</a>
+      <a class="social-link" href="https://bookshop.org/shop/thefortbookshop" target="_blank" rel="noopener">📚 Bookshop.org</a>
+    </div>
+  </div>
+
+  <footer>
+    <div>© 2026 The Fort Bookshop · Rising Action Productions LLC · Fort Wayne, Indiana</div>
+    <div class="disclosure">As an affiliate of Bookshop.org, we earn a small commission on purchases made through our links, at no extra cost to you.</div>
+    <div style="margin-top:0.5rem"><a href="privacy-policy.html">Privacy Policy</a></div>
+  </footer>
+
+</body>
+</html>
